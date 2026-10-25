@@ -57,8 +57,14 @@ function ligues(){setNav('ligues');
  <h3>Coupes et compétitions</h3><div class="list">${cups.map(l=>`<a href="#/ligue/${l.i}">${esc(l.nom)}<small>${l.n} matchs</small></a>`).join('')}</div>`}
 function ligue(i){const l=LG[i];if(!l)return ligues();setNav('ligue');
  app.innerHTML=`<h2>${esc(l.nom)}</h2><p class="sub">${l.n} matchs, 2023-24 à 2025-26 · score domicile-extérieur</p>
- ${l.top.slice(0,6).map(x=>card(x.s,'',x.k,l.n,x.p,x.cj,null)).join('')}${autres(l.top.slice(0,6),l.n,Math.min(6,l.top.length))}
- ${l.eq.length?`<h3>Équipes (${l.eq.length})</h3><div class="list">${l.eq.map(id=>`<a href="#/equipe/${id}">${esc(T[id].nom)}<small>${T[id].n} matchs ›</small></a>`).join('')}</div>`:''}`}
+ ${l.eq.length?`<div class="search"><input id="lq" type="search" autocomplete="off" placeholder="Chercher une équipe de ce championnat…" aria-label="Chercher une équipe"></div>
+ <h3 id="lh">Équipes (${l.eq.length})</h3><div class="list" id="ll"></div>`:''}
+ <h3>Scores les plus fréquents</h3>
+ ${l.top.slice(0,6).map(x=>card(x.s,'',x.k,l.n,x.p,x.cj,null)).join('')}${autres(l.top.slice(0,6),l.n,Math.min(6,l.top.length))}`;
+ if(l.eq.length){const lq=document.getElementById('lq'),ll=document.getElementById('ll');
+  const draw=()=>{const q=norm(lq.value);const ids=l.eq.filter(id=>!q||T[id]._n.includes(q)||T[id]._w.some(w=>lev(q,w)<=1));
+   ll.innerHTML=ids.length?ids.map(id=>`<a href="#/equipe/${id}">${esc(T[id].nom)}<small>${T[id].n} matchs ›</small></a>`).join(''):'<p class="sub">Aucune équipe trouvée dans ce championnat.</p>'};
+  lq.addEventListener('input',draw);lq.addEventListener('keydown',e=>{if(e.key==='Enter'){const a=ll.querySelector('a');if(a)location.hash=a.getAttribute('href')}});draw()}}
 const PROF=[
  ['0-0','Quand les cotes annoncent peu de buts, le 0-0 sort plus souvent.','11,3 %','7,0 %'],
  ['1-1','Quand le « Plus de 2,5 buts » est coté 2,10 ou plus, le 1-1 sort un peu plus souvent.','14,0 %','12,2 %'],
