@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Scores Exacts – Stats</title>
+<meta name="description" content="Scores exacts les plus fréquents par équipe et par championnat, sur 3 saisons de football.">
+<meta name="theme-color" content="#0b0f0c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Scores Exacts">
+<style>
+:root{--bg:#0b0f0c;--card:#141c16;--card2:#1b261e;--line:#26362a;--txt:#f2f7f3;--mut:#a9bdb0;--g:#2ee26b;--g2:#1fa84f;--red:#ff6b6b}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--txt);font:18px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:5;background:rgba(11,15,12,.96);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px}
+header h1{font-size:20px;margin:0;font-weight:800;letter-spacing:.2px}header h1 b{color:var(--g)}
+#back{display:none;background:none;border:0;color:var(--g);font-size:28px;padding:0 6px 0 0;cursor:pointer}
+main{padding:16px 16px 110px;max-width:640px;margin:0 auto}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:#0e1510;border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+nav a{flex:1;text-align:center;color:var(--mut);text-decoration:none;font-size:14px;padding:10px 2px 12px;font-weight:600}
+nav a span{display:block;font-size:24px;line-height:1.2}nav a.on{color:var(--g)}
+h2{font-size:26px;margin:6px 0 4px;line-height:1.2}h3{font-size:20px;margin:26px 0 10px}
+.sub{color:var(--mut);font-size:16px;margin:0 0 14px}
+.search{position:relative}
+.search input{width:100%;font-size:20px;padding:16px 16px 16px 48px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--txt);outline:none}
+.search input:focus{border-color:var(--g)}.search:before{content:"🔍";position:absolute;left:16px;top:15px;font-size:20px}
+.res a,.list a{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-top:8px;color:var(--txt);text-decoration:none;font-weight:600;min-height:56px}
+.res a small,.list a small{color:var(--mut);font-weight:400;font-size:14px;text-align:right}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.chips a{background:var(--card2);border:1px solid var(--line);color:var(--txt);text-decoration:none;padding:12px 16px;border-radius:999px;font-weight:700;font-size:17px;min-height:48px}
+.chips a.hot{background:var(--g2);border-color:var(--g2);color:#04130a}
+.tabs{display:flex;gap:8px;margin:14px 0 4px}
+.tabs button{flex:1;font-size:18px;font-weight:800;padding:14px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--mut);cursor:pointer}
+.tabs button.on{background:var(--g);border-color:var(--g);color:#04130a}
+.sc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-top:10px}
+.sc .row{display:flex;align-items:center;gap:14px}
+.sc .big{font-size:40px;font-weight:900;min-width:92px;text-align:center;font-variant-numeric:tabular-nums}
+.sc .lab{font-size:15px;color:var(--mut)}.sc .pct{font-size:24px;font-weight:800;color:var(--g)}
+.sc .fx{font-size:16px}
+.bar{height:12px;background:#0a120c;border-radius:6px;margin-top:10px;position:relative;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--g2),var(--g));border-radius:6px}
+.bar b{position:absolute;top:-2px;bottom:-2px;width:3px;background:#fff;opacity:.85}
+.cmp{font-size:15px;margin-top:8px;color:var(--mut)}.up{color:var(--g);font-weight:800}.dn{color:var(--red);font-weight:800}.eq{color:var(--mut);font-weight:800}
+.note{background:#102016;border:1px solid #1f4a2c;border-radius:12px;padding:12px 14px;margin-top:14px;font-size:16px}
+.warn{background:#231a0e;border:1px solid #5a4318;border-radius:12px;padding:12px 14px;margin-top:14px;font-size:16px}
+.prof{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px}
+.prof .s{font-size:30px;font-weight:900;color:var(--g)}.prof p{margin:6px 0 0}
+.leg{font-size:14px;color:var(--mut);margin-top:6px}
+p{margin:8px 0}a{color:var(--g)}ul{padding-left:20px}li{margin:6px 0}
+.foot{color:var(--mut);font-size:13px;margin-top:30px;text-align:center}
+</style>
+</head>
+<body>
+<header><button id="back" aria-label="Retour" onclick="history.back()">‹</button><h1>Scores <b>Exacts</b> – Stats</h1></header>
+<main id="app"></main>
+<nav>
+<a href="#/" data-t="home"><span>🏠</span>Accueil</a>
+<a href="#/ligues" data-t="ligues"><span>🏆</span>Championnats</a>
+<a href="#/profils" data-t="profils"><span>📊</span>Profils</a>
+<a href="#/apropos" data-t="apropos"><span>ℹ️</span>À propos</a>
+</nav>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});</script>
+</body>
+</html>
