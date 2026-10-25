@@ -2,7 +2,7 @@
 
 Petite application web (mobile d'abord) qui montre les **scores exacts les plus fréquents** par équipe et par championnat de football, sur les saisons 2023-24 à 2025-26 (49 983 matchs, 920 équipes).
 
-👉 **Ouvrir l'appli : https://william007t-hue.github.io/scores-exacts-stats/**
+Dépôt privé. Pour ouvrir l'appli, télécharge le dossier et ouvre `index.html`.
 
 Sur téléphone : ouvrir le lien, puis menu du navigateur → « Ajouter à l'écran d'accueil ».
 
