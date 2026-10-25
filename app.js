@@ -34,13 +34,16 @@ function card(s,lab,k,n,p,cj,e){
   cmp=`<div class="cmp"><span class="${cls}">${ar}</span> Normale du championnat : <b>${fr(e.toFixed(1))} %</b> (cote juste ${e>0?fr((100/e).toFixed(1)):'–'})</div>`}
  return `<div class="sc"><div class="row"><div class="big">${esc(s)}</div><div><div class="lab">${esc(lab)}</div><div class="pct">${fr(p.toFixed(1))} %</div><div class="fx">${k} fois sur ${n} matchs · cote juste <b>${fr(cj.toFixed(1))}</b></div></div></div>
  <div class="bar"><i style="width:${w}%"></i>${we!=null?`<b style="left:${we}%"></b>`:''}</div>${cmp}</div>`}
+function autres(arr,n,nb){const k=n-arr.reduce((a,x)=>a+x.k,0),p=n?k/n*100:0;
+ return `<div class="sc oth"><div class="row"><div class="big">…</div><div><div class="lab">Tous les autres scores</div><div class="pct">${fr(p.toFixed(1))} %</div><div class="fx">${k} fois sur ${n} matchs</div></div></div></div>
+ <p class="leg">Total : les ${nb} scores ci-dessus + les autres = 100 %.</p>`}
 let side='dom';
 function team(id){const t=T[id];if(!t)return home();setNav('team');const l=lgByKey[t.lg];
  const v=t[side];
  app.innerHTML=`<h2>${esc(t.nom)}</h2><p class="sub">${l?`<a href="#/ligue/${l.i}">${esc(t.lgn)}</a>`:esc(t.lgn)} · ${t.n} matchs (2023-24 à 2025-26)</p>
  <div class="tabs"><button data-s="dom" class="${side==='dom'?'on':''}">🏠 Domicile</button><button data-s="ext" class="${side==='ext'?'on':''}">✈️ Extérieur</button></div>
  <p class="leg">Score vu côté ${esc(t.nom)} (ses buts d’abord). Barre verte = fréquence de l’équipe, trait blanc = normale du championnat.</p>
- ${v.top.map(x=>card(x.s,x.l,x.k,v.n,x.p,x.cj,x.e)).join('')}
+ ${v.top.map(x=>card(x.s,x.l,x.k,v.n,x.p,x.cj,x.e)).join('')}${autres(v.top,v.n,v.top.length)}
  <div class="note"><b>Est-ce significatif ?</b><br>${t.notes.length?t.notes.map(esc).join('<br>')+'<br>':''}
  ${t.ts?(t.notes.length?'Les autres écarts ne passent pas les tests statistiques : ils peuvent venir du hasard.':'Non : aucun écart de cette équipe ne passe les tests statistiques (correction pour tests multiples, vérification sur 2025-26). Ils peuvent venir du hasard.'):'Pas assez de matchs pour un test fiable : les écarts peuvent venir du hasard.'}
  <br><span class="leg">La « normale » ne tient pas compte du niveau de l’équipe : un gros club gagne plus souvent que la moyenne, c’est normal.</span></div>
@@ -54,7 +57,7 @@ function ligues(){setNav('ligues');
  <h3>Coupes et compétitions</h3><div class="list">${cups.map(l=>`<a href="#/ligue/${l.i}">${esc(l.nom)}<small>${l.n} matchs</small></a>`).join('')}</div>`}
 function ligue(i){const l=LG[i];if(!l)return ligues();setNav('ligue');
  app.innerHTML=`<h2>${esc(l.nom)}</h2><p class="sub">${l.n} matchs, 2023-24 à 2025-26 · score domicile-extérieur</p>
- ${l.top.slice(0,6).map(x=>card(x.s,'',x.k,l.n,x.p,x.cj,null)).join('')}
+ ${l.top.slice(0,6).map(x=>card(x.s,'',x.k,l.n,x.p,x.cj,null)).join('')}${autres(l.top.slice(0,6),l.n,Math.min(6,l.top.length))}
  ${l.eq.length?`<h3>Équipes (${l.eq.length})</h3><div class="list">${l.eq.map(id=>`<a href="#/equipe/${id}">${esc(T[id].nom)}<small>${T[id].n} matchs ›</small></a>`).join('')}</div>`:''}`}
 const PROF=[
  ['0-0','Quand les cotes annoncent peu de buts, le 0-0 sort plus souvent.','11,3 %','7,0 %'],
